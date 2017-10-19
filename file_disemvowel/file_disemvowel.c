@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define BUF_SIZE 1024
 
@@ -8,6 +9,11 @@ bool is_vowel(char c) {
      * Returns true if c is a vowel (upper or lower case), and 
      * false otherwise. 
      */ 
+	//We create a string that contains all the vowels
+	//Then return true if c is in this string, and false otherwise
+	char string[] = "aeiouAEIOU";
+	return strchr(string, c) != NULL;
+
 }
 
 int copy_non_vowels(int num_chars, char* in_buf, char* out_buf) {
