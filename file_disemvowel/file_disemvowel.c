@@ -32,6 +32,19 @@ void disemvowel(FILE* inputFile, FILE* outputFile) {
      * in a buffer of data, copy the non-vowels to the output buffer, and
      * use fwrite to write that out. 
      */
+	FILE* outputFile;
+	FILE* inputFile;
+	inputFile = fopen(inputFile, "w+");
+	outputFile = fopen(outputFile, "w+");
+        int nRead, nWrite;
+	char* inBuffer; 
+	char* outBuffer;
+
+	buffer = (char*) calloc(len+1, sizeof(char));
+	while(0 < (nRead=fread(buffer,sizeof(char),BUF_SIZE,inputFile))){
+		nWrite=fwrite(buffer, 1, nRead, outputFile);
+	 }
+
 }
 
 int main(int argc, char *argv[]) { 
@@ -40,7 +53,8 @@ int main(int argc, char *argv[]) {
 
     // Code that processes the command line arguments 
     // and sets up inputFile and outputFile.
-
+    inputFile = Stdin;
+    outputFile = Stdout;    
     disemvowel(inputFile, outputFile);
 
     return 0; 
