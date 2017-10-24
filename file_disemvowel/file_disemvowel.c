@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define BUF_SIZE 1024
 
@@ -23,6 +24,16 @@ int copy_non_vowels(int num_chars, char* in_buf, char* out_buf) {
      * and this function should return the number of non-vowels that
      * that were copied over.
      */
+
+     int size, i;
+     for(i = 0; i < num_chars; ++i){
+	if(is_vowel(in_buf[i]) == false){
+		in_buf[i] = out_buf[i];
+		size++;
+	}	
+     }
+
+     return size;
 }
 
 void disemvowel(FILE* inputFile, FILE* outputFile) { 
@@ -32,18 +43,24 @@ void disemvowel(FILE* inputFile, FILE* outputFile) {
      * in a buffer of data, copy the non-vowels to the output buffer, and
      * use fwrite to write that out. 
      */
-	FILE* outputFile;
-	FILE* inputFile;
-	inputFile = fopen(inputFile, "w+");
-	outputFile = fopen(outputFile, "w+");
+	FILE* outFile;
+	FILE* inFile;
+	inFile = fopen(inputFile, "r");
+	outFile = fopen(outputFile, "w+");
         int nRead, nWrite;
 	char* inBuffer; 
 	char* outBuffer;
 
-	buffer = (char*) calloc(len+1, sizeof(char));
-	while(0 < (nRead=fread(buffer,sizeof(char),BUF_SIZE,inputFile))){
-		nWrite=fwrite(buffer, 1, nRead, outputFile);
+	inBuffer = (char*) calloc(BUF_SIZE, sizeof(char));
+	outBuffer= (char*) calloc(BUF_SIZE, sizeof(char));
+
+	while(0 < (nRead=fread(inBuffer, sizeof(char), BUF_SIZE, inFile))){
+		nWrite=copy_non_vowels(nRead, inBuffer, outBuffer); 
+		fwrite(outBuffer, 1, nWrite, outFile);
 	 }
+
+	fclose(inFile);
+	fclose(outFile);
 
 }
 
@@ -53,8 +70,9 @@ int main(int argc, char *argv[]) {
 
     // Code that processes the command line arguments 
     // and sets up inputFile and outputFile.
-    inputFile = Stdin;
-    outputFile = Stdout;    
+    inputFile = stdin;
+    outputFile = stdout;
+
     disemvowel(inputFile, outputFile);
 
     return 0; 
