@@ -25,16 +25,14 @@ int copy_non_vowels(int num_chars, char* in_buf, char* out_buf) {
      * that were copied over.
      */
 
-     int size, i, k;
+     int size, i;
      size = 0;
-     k = 0;
      for(i = 0; i < num_chars; ++i){
   	
 	//if the character is not a vowel, put it in the outBuffer
 	//and increment size and k
 	if(is_vowel(in_buf[i]) == false){
-		out_buf[k] = in_buf[i];
-		k++;
+		out_buf[size] = in_buf[i];
 		size++;
 	}	
      }
@@ -81,15 +79,21 @@ int main(int argc, char *argv[]) {
     outputFile = stdout;
 
     //Let inputFile be the second argument
-    if(argc == 2){
-	    inputFile = fopen(argv[1], "r");
-    }
-	
-    //let inputFile be the the second argument, and outputfile the third
-    else if(argc ==  3){
+    if(argc == 3){
 	    inputFile = fopen(argv[1], "r");
 	    outputFile = fopen(argv[2], "w");
     }
+	
+    //let inputFile be the the second argument, and outputfile the third
+    else if(argc ==  2){
+	    inputFile = fopen(argv[1], "r");
+    }
+    
+    //just run if there is only 1 command line argument    
+    else if(argc == 1){
+	    disemvowel(inputFile, outputFile);
+    }
+
     else{
 	    //Return input incorrect message if there's more than 3 arguments or less than 1, and exit from the program
 	    printf("Input is incorrect");
