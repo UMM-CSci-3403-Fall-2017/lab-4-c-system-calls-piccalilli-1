@@ -58,7 +58,8 @@ void disemvowel(FILE* inputFile, FILE* outputFile) {
 	
 	//While that keeps putting 'chuncks' of data into a buffer, untill all data is read
 	while(0 < (nRead=fread(inBuffer, sizeof(char), BUF_SIZE, inputFile))){
-
+		//getting the non_vowels, nWrite is the size of the total non_vowels
+		//After that, write the things in outBuffer to our outputfile
 		nWrite=copy_non_vowels(nRead, inBuffer, outBuffer); 
 		fwrite(outBuffer, sizeof(char), nWrite, outputFile);
 	 }
@@ -66,6 +67,10 @@ void disemvowel(FILE* inputFile, FILE* outputFile) {
 	//closing our input and output files
 	fclose(inputFile);
 	fclose(outputFile);
+
+	//Freeing the memory
+	free(inBuffer);
+	free(outBuffer);
 
 }
 
