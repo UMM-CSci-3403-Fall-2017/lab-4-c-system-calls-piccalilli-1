@@ -45,7 +45,7 @@ void process_directory(const char* path) {
    //pointer dp	
    DIR *dp = NULL;
 
-   //dirent structure, to use later in stat
+   //dirent structure
    struct dirent *dptr = NULL;
    //increment the number of directories
    num_dirs++;
