@@ -16,9 +16,11 @@ bool is_dir(const char* path) {
    * return value from stat in case there is a problem, e.g., maybe the
    * the file doesn't actually exist.
    */
+	//stat struct to be use later in stat()
 	struct stat buf;
 	stat(path, &buf);
-	return S_ISDIR(buf.st_mode) == 0;
+	//returns true if the mode of buf is a directory
+	return S_ISDIR(buf.st_mode);
 }
 
 /*
@@ -39,32 +41,48 @@ void process_directory(const char* path) {
    * with a matching call to chdir() to move back out of it when you're
    * done.
    */
-   chdir(path);	
-   DIR *dp = NULL;
-   struct dirent *dptr = NULL;
-   if(NULL == (dp = opendir(path))){
-	   printf("\n Cannot open the directory"){
 
+   //pointer dp	
+   DIR *dp = NULL;
+
+   //dirent structure, to use later in stat
+   struct dirent *dptr = NULL;
+   //increment the number of directories
+   num_dirs++;
+   //open the directory stream and check whether it is null, if it is, return	
+   if(NULL == (dp = opendir(path))){
+	   printf("Cannot open the directory \n");
+		return;
 	   }
   else{
-	   while(NULL != (dptr = readdir(dp))){
-		num_dirs++;   
-		process_path(dptr);
+	  //Now that we know that it is not null, move into the directory
+	  chdir(path);
+
+	  //read the directory contents
+	  //if we get anything other than "." or "..", make a recursive call
+	  while(NULL != (dptr = readdir(dp))){ 
+		if(strcmp(dptr->d_name, ".") != 0 && strcmp(dptr->d_name, "..") !=  0){
+			process_path(dptr->d_name);
+		}
 		
 	   }
-	   chdir("..");
-	   closedir(dp);
-   }
-  }
+	  //move back out of the directory
+	  chdir("..");
+
+	  //closed the directory stream
+	  closedir(dp);
+   } 
 }
 
 void process_file(const char* path) {
   /*
    * Update the number of regular files.
    */
-   struct stat buf;   
+   struct stat buf;
    stat(path, &buf);
-   if(S_ISREG(buf.st_mode) == 0){
+
+   //increment the number of regular filesw if it is a regular file
+   if(S_ISREG(buf.st_mode)){
 	num_regular++;
    }
 }
